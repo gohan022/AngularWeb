@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Todo } from '../../components/common/models/todo';
+import { API_URL } from '../../app.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
 
-  private baseUrl = 'http://localhost:8080/users/todos';
+  private baseUrl = `${API_URL}/users/todos`;
   private headers = new HttpHeaders().set('Content-Type', 'application/json');
 
   constructor(private httpClient: HttpClient) {
