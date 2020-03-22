@@ -1,0 +1,34 @@
+<h2>Todos List <small class="float-right"><a routerLink="/todos/create" class="btn btn-sm btn-success">+ Add Todo</a></small></h2>
+<hr>
+
+<div class="alert alert-success" *ngIf="message">{{message}}</div>
+<div class="alert alert-danger" *ngIf="error">{{message}}</div>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+  <tr>
+    <th>ID</th>
+    <th>Description</th>
+    <th class="text-center">is Completed?</th>
+    <th>Created At</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let todo of todos">
+    <td>{{todo.id}}</td>
+    <td>{{todo.description}}</td>
+    <td class="text-center">
+      <div *ngIf="todo.done; else myElseBlock">Yes</div>
+      <ng-template #myElseBlock>No</ng-template>
+    </td>
+    <td>
+      {{todo.targetDate | date}}
+    </td>
+    <td class="text-center">
+      <button (click)="updateTodo(todo.id)" class="btn btn-sm btn-info mr-1">Update</button>
+      <button (click)="deleteTodo(todo.id)" class="btn btn-sm btn-danger">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>

@@ -1,0 +1,28 @@
+<h1>Create a Todo</h1>
+<hr>
+
+<div class="row">
+  <div class="col-4">
+    <form method="post" (ngSubmit)="!todoForm.invalid && createTodo()" #todoForm="ngForm">
+
+      <div class="alert alert-danger" *ngIf="todoForm.dirty && todoForm.invalid">
+        Please fix the following errors:
+        <ul>
+          <li *ngIf="targetDate.invalid">Please select a date</li>
+        </ul>
+      </div>
+
+      <div class="form-group">
+        <label class="text-muted">Description</label>
+        <input type="text" name="description" [(ngModel)]="todo.description" id="description" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label class="text-muted">Target Date</label>
+        <input type="date" name="targetDate" #targetDate="ngModel"
+               [(ngModel)]="todo.targetDate"
+               id="targetDate" class="form-control" required="" />
+      </div>
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+</div>

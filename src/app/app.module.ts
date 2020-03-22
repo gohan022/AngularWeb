@@ -4,11 +4,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from './component/common/header/header.component';
-import { FooterComponent } from './component/common/footer/footer.component';
-import { HomeComponent } from './component/home/home.component';
-import { ErrorComponent } from './component/common/error/error.component';
-import { DashboardComponent } from './component/dashboard/dashboard.component';
+import { HttpClientModule } from '@angular/common/http';
+import { HeaderComponent } from './components/common/header/header.component';
+import { FooterComponent } from './components/common/footer/footer.component';
+import { HomeComponent } from './components/home/home.component';
+import { ErrorComponent } from './components/common/error/error.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { TodoListComponent } from './components/todo/todo-list/todo-list.component';
+import { TodoUpdateComponent } from './components/todo/todo-update/todo-update.component';
+import { TodoCreateComponent } from './components/todo/todo-create/todo-create.component';
 
 @NgModule({
   declarations: [
@@ -17,12 +21,16 @@ import { DashboardComponent } from './component/dashboard/dashboard.component';
     FooterComponent,
     HomeComponent,
     ErrorComponent,
-    DashboardComponent
+    DashboardComponent,
+    TodoListComponent,
+    TodoUpdateComponent,
+    TodoCreateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
