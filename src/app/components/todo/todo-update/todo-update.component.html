@@ -3,17 +3,22 @@
 
 <div class="row">
   <div class="col-4">
-    <form method="post" (ngSubmit)="!todoForm.invalid && saveTodo()" #todoForm="ngForm">
+    <form method="post" (ngSubmit)="!todoForm.invalid && saveTodo(todoForm)" #todoForm="ngForm">
       <div class="form-group">
         <label class="text-muted">Description</label>
-        <input type="text" name="description" [(ngModel)]="todo.description" id="description" class="form-control" />
+        <input type="text" name="description" [(ngModel)]="todo.description" #description="ngModel" id="description"
+               class="form-control"
+               [ngClass]="{ 'is-invalid': todoForm.submitted && description.invalid }"/>
+        <div class="invalid-feedback" *ngIf="todoForm.submitted && description.invalid">
+          <p *ngIf="description.errors.required">Description is required</p>
+        </div>
       </div>
       <div class="form-group">
         <label class="text-muted">Target Date</label>
-        <input type="date" name="targetDate"
-               [ngModel]="todo.targetDate | date:'yyyy-MM-dd'"
+        <input type="text" name="targetDate"
+               [ngModel]="todo.targetDate | date:'MM/dd/yyyy'"
                (ngModelChange)="todo.targetDate = $event"
-               id="targetDate" class="form-control" required="" />
+               id="targetDate" class="form-control" required="" bsDatepicker [bsConfig]="{ isAnimated: true }"/>
       </div>
       <button type="submit" class="btn btn-primary">Update</button>
     </form>

@@ -26,7 +26,8 @@
       {{todo.targetDate | date}}
     </td>
     <td class="text-center">
-      <button (click)="updateTodo(todo.id)" class="btn btn-sm btn-info mr-1">Update</button>
+      <!--<a [routerLink]="['/todos/', todo.id]" class="btn btn-sm btn-info mr-1">Update</a>-->
+      <button (click)="updateTodo(todo.id)" class="btn btn-sm btn-info mr-1">{{'update' | translate}}</button>
       <button (click)="deleteTodo(todo.id)" class="btn btn-sm btn-danger">Delete</button>
     </td>
   </tr>

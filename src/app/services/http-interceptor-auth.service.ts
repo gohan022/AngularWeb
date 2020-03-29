@@ -6,10 +6,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class HttpInterceptorAuthService implements HttpInterceptor {
-
-  constructor() {
-  }
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const username = 'user';
     const password = 'password';
@@ -23,5 +19,8 @@ export class HttpInterceptorAuthService implements HttpInterceptor {
     });
 
     return next.handle(req);
+    
+    // to change in reponse
+    //return next.handle(req).pipe();
   }
 }

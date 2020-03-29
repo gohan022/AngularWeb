@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { Todo } from '../../components/common/models/todo';
 import { API_URL } from '../../app.constants';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,9 @@ export class TodoService {
   }
 
   getAllTodos(): Observable<Todo[]> {
-    return this.httpClient.get<Todo[]>(this.baseUrl, {headers: this.headers});
+    return this.httpClient.get<Todo[]>(this.baseUrl, {headers: this.headers}).pipe(
+      catchError(this.error)
+    );
   }
 
   getTodo(id): Observable<Todo> {
@@ -33,5 +36,17 @@ export class TodoService {
 
   deleteTodo(id) {
     return this.httpClient.delete(this.baseUrl + `/${id}`, {headers: this.headers});
+  }
+
+  // Handle Errors
+  error(error: HttpErrorResponse) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = error.error.message;
+    } else {
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.log(errorMessage);
+    return throwError(errorMessage);
   }
 }

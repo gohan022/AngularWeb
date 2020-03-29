@@ -10,6 +10,6 @@ body {
   position:relative;
 }
 
-.ng-invalid:not(form) {
+.ng-invalid.ng-touched:not(form) {
   border-left: 4px solid #ff0000;
 }

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './components/common/header/header.component';
 import { FooterComponent } from './components/common/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
@@ -14,6 +14,11 @@ import { TodoListComponent } from './components/todo/todo-list/todo-list.compone
 import { TodoUpdateComponent } from './components/todo/todo-update/todo-update.component';
 import { TodoCreateComponent } from './components/todo/todo-create/todo-create.component';
 import { HttpInterceptorAuthService } from './services/http-interceptor-auth.service';
+import { LoginComponent } from './components/auth/login/login.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 @NgModule({
   declarations: [
@@ -25,13 +30,24 @@ import { HttpInterceptorAuthService } from './services/http-interceptor-auth.ser
     DashboardComponent,
     TodoListComponent,
     TodoUpdateComponent,
-    TodoCreateComponent
+    TodoCreateComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    BsDatepickerModule.forRoot(),
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorAuthService, multi: true}
@@ -39,4 +55,8 @@ import { HttpInterceptorAuthService } from './services/http-interceptor-auth.ser
   bootstrap: [AppComponent]
 })
 export class AppModule {
+}
+
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }

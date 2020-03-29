@@ -3,7 +3,7 @@
 
 <div class="row">
   <div class="col-4">
-    <form method="post" (ngSubmit)="!todoForm.invalid && createTodo()" #todoForm="ngForm">
+    <form method="post" (ngSubmit)="todoForm.form.valid && createTodo()" #todoForm="ngForm">
 
       <div class="alert alert-danger" *ngIf="todoForm.dirty && todoForm.invalid">
         Please fix the following errors:
@@ -14,15 +14,24 @@
 
       <div class="form-group">
         <label class="text-muted">Description</label>
-        <input type="text" name="description" [(ngModel)]="todo.description" id="description" class="form-control" required />
+        <input type="text" name="description" #description="ngModel"
+               [(ngModel)]="todo.description" id="description"
+               class="form-control" required
+               [ngClass]="{ 'is-invalid': description.invalid && description.touched }"/>
+        <div class="invalid-feedback" *ngIf="description.invalid && description.touched">
+          <p *ngIf="description.errors.required">Description is required</p>
+        </div>
       </div>
       <div class="form-group">
         <label class="text-muted">Target Date</label>
-        <input type="date" name="targetDate" #targetDate="ngModel"
+        <input type="text" name="targetDate" #targetDate="ngModel"
                [(ngModel)]="todo.targetDate"
-               id="targetDate" class="form-control" required="" />
+               id="targetDate" class="form-control" required="" bsDatepicker [bsConfig]="{ isAnimated: true }"/>
+        <div class="invalid-feedback" *ngIf="todoForm.submitted && targetDate.invalid">
+          <p *ngIf="targetDate.errors.required">Target date is required</p>
+        </div>
       </div>
-      <button type="submit" class="btn btn-primary">Create</button>
+      <button type="submit" class="btn btn-primary" [disabled]="todoForm.invalid">Create</button>
     </form>
   </div>
 </div>
