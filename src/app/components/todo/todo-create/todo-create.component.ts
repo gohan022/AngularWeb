@@ -6,8 +6,7 @@ import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-todo-create',
-  templateUrl: './todo-create.component.html',
-  styleUrls: ['./todo-create.component.css']
+  templateUrl: './todo-create.component.html'
 })
 export class TodoCreateComponent implements OnInit {
   todo: Todo;
@@ -17,7 +16,6 @@ export class TodoCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.todo = new Todo();
   }
 
   createTodo() {

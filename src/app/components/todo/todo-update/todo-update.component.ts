@@ -6,8 +6,7 @@ import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-todo-update',
-  templateUrl: './todo-update.component.html',
-  styleUrls: ['./todo-update.component.css']
+  templateUrl: './todo-update.component.html'
 })
 export class TodoUpdateComponent implements OnInit {
   id: number;
@@ -17,7 +16,6 @@ export class TodoUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.todo = new Todo();
     this.id = this.route.snapshot.params.id;
     this.getTodo();
   }
