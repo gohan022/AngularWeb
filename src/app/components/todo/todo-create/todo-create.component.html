@@ -24,11 +24,17 @@
       </div>
       <div class="form-group">
         <label class="text-muted">Target Date</label>
-        <input type="text" name="targetDate" #targetDate="ngModel"
-               [(ngModel)]="todo.targetDate"
-               id="targetDate" class="form-control" required="" bsDatepicker [bsConfig]="{ isAnimated: true }"/>
-        <div class="invalid-feedback" *ngIf="todoForm.submitted && targetDate.invalid">
-          <p *ngIf="targetDate.errors.required">Target date is required</p>
+        <div class="input-group">
+          <input type="text" name="targetDate" #targetDate="ngModel"
+                 [(ngModel)]="todo.targetDate"
+                 id="targetDate" class="form-control" required ngbDatepicker #d="ngbDatepicker"/>
+          <div class="input-group-append">
+            <button class="btn btn-secondary" (click)="d.toggle()" type="button"><i class="fa fa-calendar"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback" *ngIf="todoForm.submitted && targetDate.invalid">
+            <p *ngIf="targetDate.errors.required">Target date is required</p>
+          </div>
         </div>
       </div>
       <button type="submit" class="btn btn-primary" [disabled]="todoForm.invalid">Create</button>

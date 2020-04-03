@@ -33,3 +33,9 @@
   </tr>
   </tbody>
 </table>
+
+<ngb-pagination *ngIf="todos" class="d-flex justify-content-end"
+                [collectionSize]="totalElements"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                (pageChange)="loadPage($event)"></ngb-pagination>
