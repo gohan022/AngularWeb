@@ -17,6 +17,12 @@ export class TodoService {
 
   getAllTodos(params?): Observable<GetResponseTodoList> {
     return this.httpClient.get<GetResponseTodoList>(this.baseUrl, {headers: this.headers, params}).pipe(
+      map(responseData => {
+        if (responseData.hasOwnProperty('number')) {
+          responseData.number++;
+        }
+        return responseData;
+      }),
       catchError(this.error)
     );
   }
@@ -50,7 +56,7 @@ export class TodoService {
   }
 }
 
-interface GetResponseTodoList {
+export interface GetResponseTodoList {
   content: Todo[];
   totalPages: number;
   totalElements: number;

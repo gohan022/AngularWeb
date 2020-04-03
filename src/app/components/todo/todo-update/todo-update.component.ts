@@ -24,7 +24,7 @@ export class TodoUpdateComponent implements OnInit, CanComponentDeactivate {
     this.getTodo();
   }
 
-  saveTodo(form: NgForm) {
+  updateTodo(form: NgForm) {
     console.log(form);
     this.todoService.updateTodo(this.id, this.todo).subscribe(
       data => {

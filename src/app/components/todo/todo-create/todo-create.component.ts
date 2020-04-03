@@ -26,6 +26,7 @@ export class TodoCreateComponent implements OnInit {
       data => {
         console.log(`New Todo created`);
         console.log(data);
+        this.form.reset();
         this.router.navigate(['todos']);
       }
     );

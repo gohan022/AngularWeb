@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TodoService } from '../../../services/data/todo.service';
 import { Todo } from '../../common/models/todo';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html'
 })
-export class TodoListComponent implements OnInit, OnDestroy {
+export class TodoListComponent implements OnInit {
   todos: Todo[];
   page = 1;
   pageSize: number;
@@ -18,8 +17,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   };
   message: string;
   error = false;
-
-  private routeQuerySubscription: Subscription;
+  isFetching = false;
 
   constructor(private todoService: TodoService, private router: Router, private route: ActivatedRoute) {
   }
@@ -33,7 +31,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     }
     this.getAllTodos();*/
 
-    this.routeQuerySubscription = this.route.queryParams.subscribe(
+    this.route.queryParams.subscribe(
       (params: Params) => {
         if (params.page) {
           this.page = +params.page;
@@ -78,10 +76,6 @@ export class TodoListComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.routeQuerySubscription.unsubscribe();
-  }
-
   private listTodos() {
     /*if (this.queryParams.page) {
       this.queryParams = {
@@ -90,14 +84,22 @@ export class TodoListComponent implements OnInit, OnDestroy {
       };
     }*/
 
+    this.isFetching = true;
 
+    // setInterval(() => {
     this.todoService.getAllTodos(this.queryParams).subscribe(
       data => {
+        // console.log(data.number);
         this.todos = data.content;
-        this.page = data.number + 1;
+        this.page = data.number;
         this.pageSize = data.size;
         this.totalElements = data.totalElements;
+        this.isFetching = false;
+      },
+      error => {
+        this.isFetching = false;
       }
     );
+    // }, 3000);
   }
 }

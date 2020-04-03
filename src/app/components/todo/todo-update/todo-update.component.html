@@ -3,7 +3,7 @@
 
 <div class="row">
   <div class="col-4">
-    <form method="post" (ngSubmit)="!todoForm.invalid && saveTodo(todoForm)" #todoForm="ngForm">
+    <form method="post" (ngSubmit)="!todoForm.invalid && updateTodo(todoForm)" #todoForm="ngForm">
       <div class="form-group">
         <label class="text-muted">Description</label>
         <input type="text" name="description" [(ngModel)]="todo.description" #description="ngModel" id="description"
