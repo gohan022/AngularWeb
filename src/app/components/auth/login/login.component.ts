@@ -1,21 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { UserService } from '../../../services/data/user.service';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
+  @ViewChild('loginForm') form: NgForm;
 
-  username: string;
-  password: string;
+  username = 'gohan022';
+  password = 'password';
 
-  constructor() {
+  constructor(private userService: UserService, private router: Router) {
   }
 
   ngOnInit(): void {
   }
 
   doLogin() {
-    return false;
+    this.userService.getToken(this.form.value).subscribe(
+      data => {
+        console.log(data);
+        sessionStorage.setItem('token', data.token);
+        this.router.navigate(['todos']);
+      }
+    );
   }
 }

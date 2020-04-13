@@ -9,25 +9,23 @@ import { NgForm } from '@angular/forms';
   templateUrl: './todo-create.component.html'
 })
 export class TodoCreateComponent implements OnInit {
-  todo: Todo;
   @ViewChild('todoForm') form: NgForm;
 
   constructor(private todoService: TodoService, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.todo = new Todo();
   }
 
   createTodo() {
     console.log(this.form);
     console.log(this.form.value);
-    this.todoService.createTodo(this.todo).subscribe(
+    this.todoService.createTodo(this.form.value).subscribe(
       data => {
         console.log(`New Todo created`);
         console.log(data);
-        this.form.reset();
-        this.router.navigate(['todos']);
+        // this.form.reset();
+        // this.router.navigate(['todos']);
       }
     );
   }

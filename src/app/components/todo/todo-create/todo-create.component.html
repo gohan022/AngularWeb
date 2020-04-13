@@ -15,7 +15,7 @@
       <div class="form-group">
         <label class="text-muted">Description</label>
         <input type="text" name="description" #description="ngModel"
-               [(ngModel)]="todo.description" id="description"
+               ngModel id="description"
                class="form-control" required
                [ngClass]="{ 'is-invalid': description.invalid && description.touched }"/>
         <div class="invalid-feedback" *ngIf="description.invalid && description.touched">
@@ -26,8 +26,8 @@
         <label class="text-muted">Target Date</label>
         <div class="input-group">
           <input type="text" name="targetDate" #targetDate="ngModel"
-                 [(ngModel)]="todo.targetDate"
-                 id="targetDate" class="form-control" required ngbDatepicker #d="ngbDatepicker"/>
+                 ngModel id="targetDate" class="form-control" required bsDatepicker
+                 [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD/MM/YYYY' }" #d="bsDatepicker"/>
           <div class="input-group-append">
             <button class="btn btn-secondary" (click)="d.toggle()" type="button"><i class="fa fa-calendar"></i>
             </button>

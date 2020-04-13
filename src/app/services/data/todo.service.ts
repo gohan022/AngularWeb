@@ -1,22 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Todo } from '../../components/common/models/todo';
 import { API_URL } from '../../app.constants';
 import { catchError, map } from 'rxjs/operators';
+import { Pageable } from '../../components/common/models/pageable';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
-  private baseUrl = `${API_URL}/users/todos`;
+  private baseUrl = `${API_URL}/user/todos`;
   private headers = new HttpHeaders().set('Content-Type', 'application/json');
 
   constructor(private httpClient: HttpClient) {
   }
 
-  getAllTodos(params?): Observable<GetResponseTodoList> {
-    return this.httpClient.get<GetResponseTodoList>(this.baseUrl, {headers: this.headers, params}).pipe(
+  getAllTodos(searchParams?): Observable<Pageable<Todo>> {
+     const params = new HttpParams({fromObject: searchParams});
+    /*
+    let params = new new HttpParams();
+    params = searchParams?.page ? params.set('page', searchParams.page) : params;
+    params = searchParams?.size ? params.set('size', searchParams.size) : params;
+    */
+
+     return this.httpClient.get<Pageable<Todo>>(this.baseUrl, {headers: this.headers, params}).pipe(
       map(responseData => {
         if (responseData.hasOwnProperty('number')) {
           responseData.number++;
@@ -36,7 +44,7 @@ export class TodoService {
   }
 
   updateTodo(id, todo) {
-    return this.httpClient.put(this.baseUrl + `/${id}`, todo);
+    return this.httpClient.put(this.baseUrl + `/${id}`, todo, {observe: 'response'});
   }
 
   deleteTodo(id) {
@@ -54,12 +62,4 @@ export class TodoService {
     console.log(errorMessage);
     return throwError(errorMessage);
   }
-}
-
-export interface GetResponseTodoList {
-  content: Todo[];
-  totalPages: number;
-  totalElements: number;
-  size: number;
-  number: number;
 }

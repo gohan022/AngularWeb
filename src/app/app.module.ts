@@ -12,7 +12,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { TodoListComponent } from './components/todo/todo-list/todo-list.component';
 import { TodoUpdateComponent } from './components/todo/todo-update/todo-update.component';
 import { TodoCreateComponent } from './components/todo/todo-create/todo-create.component';
-import { HttpInterceptorAuthService } from './services/http-interceptor-auth.service';
+import { HttpInterceptorAuthService } from './services/interceptors/http-interceptor-auth.service';
 import { LoginComponent } from './components/auth/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -21,6 +21,8 @@ import { UserListComponent } from './components/user/user-list/user-list.compone
 import { NgbAlertModule, NgbDatepickerModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotFoundComponent } from './components/common/error/not-found/not-found.component';
 import { UnauthorizedComponent } from './components/common/error/unauthorized/unauthorized.component';
+import { LoggingInterceptorService } from './services/interceptors/logging-interceptor.service';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { UnauthorizedComponent } from './components/common/error/unauthorized/un
     NgbPaginationModule,
     NgbAlertModule,
     NgbDatepickerModule,
+    BrowserAnimationsModule,
+    BsDatepickerModule.forRoot(),
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
@@ -56,7 +60,16 @@ import { UnauthorizedComponent } from './components/common/error/unauthorized/un
     })
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorAuthService, multi: true}
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorAuthService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoggingInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -14,6 +14,8 @@ export class TodoUpdateComponent implements OnInit, CanComponentDeactivate {
   id: number;
   todo: Todo;
   changesSaved = false;
+  error = false;
+  success = false;
 
   constructor(private todoService: TodoService, private route: ActivatedRoute) {
   }
@@ -26,11 +28,15 @@ export class TodoUpdateComponent implements OnInit, CanComponentDeactivate {
 
   updateTodo(form: NgForm) {
     console.log(form);
+    console.log(form.value);
+    console.log(this.todo);
     this.todoService.updateTodo(this.id, this.todo).subscribe(
       data => {
         console.log(`Update Todo ID: ${this.id}`);
         console.log(data);
         this.changesSaved = true;
+        this.error = false;
+        this.success = true;
       }
     );
   }
@@ -47,7 +53,7 @@ export class TodoUpdateComponent implements OnInit, CanComponentDeactivate {
     this.todoService.getTodo(this.id).subscribe(
       response => {
         this.todo = response;
-        console.log(response);
+       // console.log(response);
       }
     );
   }

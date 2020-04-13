@@ -4,6 +4,9 @@
 <div class="row">
   <div class="col-4">
     <form method="post" (ngSubmit)="!todoForm.invalid && updateTodo(todoForm)" #todoForm="ngForm">
+      <ngb-alert [type]="'success'" *ngIf="success" (close)="success = false">
+        <strong>Success!</strong> Todo is updated.
+      </ngb-alert>
       <div class="form-group">
         <label class="text-muted">Description</label>
         <input type="text" name="description" [(ngModel)]="todo.description" #description="ngModel" id="description"
@@ -16,14 +19,11 @@
       <div class="form-group">
         <label class="text-muted">Target Date</label>
         <div class="input-group">
-          <input type="text" name="targetDate"
-                 [ngModel]="todo.targetDate | date:'yyyy-MM-dd'"
+          <input type="text" name="targetDate" placeholder="dd/MM/yyyy"
+                 [ngModel]="todo.targetDate | date:'dd/MM/yyyy'"
                  (ngModelChange)="todo.targetDate = $event"
-                 id="targetDate" class="form-control" required ngbDatepicker #d="ngbDatepicker"/>
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i class="fa fa-calendar"></i>
-            </button>
-          </div>
+                 id="targetDate" class="form-control" required  bsDatepicker
+                 [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD/MM/YYYY' }"/>
         </div>
       </div>
       <button type="submit" class="btn btn-primary">Update</button>

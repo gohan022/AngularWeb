@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { TodoService } from '../../../services/data/todo.service';
 import { Todo } from '../../common/models/todo';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-todo-list',
@@ -12,14 +13,17 @@ export class TodoListComponent implements OnInit {
   page = 1;
   pageSize: number;
   totalElements: number;
+  totalPages: number;
   queryParams = {
     page: this.page
   };
   message: string;
   error = false;
+  success = false;
   isFetching = false;
+  modalRef: NgbModalRef;
 
-  constructor(private todoService: TodoService, private router: Router, private route: ActivatedRoute) {
+  constructor(private todoService: TodoService, private router: Router, private route: ActivatedRoute, private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -36,13 +40,13 @@ export class TodoListComponent implements OnInit {
         if (params.page) {
           this.page = +params.page;
           this.queryParams = {
-            ...this.queryParams,
+            ...params,
             page: +params.page - 1
           };
         } else {
           this.page = 1;
           this.queryParams = {
-            ...this.queryParams,
+            ...params,
             page: 0
           };
         }
@@ -60,20 +64,37 @@ export class TodoListComponent implements OnInit {
     this.router.navigate(['todos'], {queryParams: {page}, queryParamsHandling: 'merge'});
   }
 
+  updatePageSize(size: number) {
+    this.router.navigate(['todos'], {queryParams: {size}});
+  }
+
   updateTodo(id: number) {
     console.log(`update todo: ${id}`);
     this.router.navigate(['todos', id]);
   }
 
   deleteTodo(id: number) {
-    this.todoService.deleteTodo(id).subscribe(
-      response => {
-        console.log(`delete todo: ${id}`);
-        console.log(response);
-        this.message = `Todo ID: ${id} deleted successfully!`;
-        this.listTodos();
-      }
-    );
+    /* this.todoService.deleteTodo(id).subscribe(
+       response => {
+         console.log(`delete todo: ${id}`);
+         console.log(response);
+         this.success = true;
+         this.message = `Todo ID: ${id} deleted successfully!`;
+         this.listTodos();
+       }
+     );*/
+
+    this.success = true;
+    this.message = `Todo ID: ${id} deleted successfully!`;
+    this.modalRef.close();
+  }
+
+  confirmDelete(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.open(template);
+  }
+
+  decline() {
+    this.modalRef.dismiss();
   }
 
   private listTodos() {
@@ -93,6 +114,7 @@ export class TodoListComponent implements OnInit {
         this.todos = data.content;
         this.page = data.number;
         this.pageSize = data.size;
+        this.totalPages = data.totalPages;
         this.totalElements = data.totalElements;
         this.isFetching = false;
       },
