@@ -40,7 +40,7 @@ export class TodoService {
   }
 
   createTodo(todo) {
-    return this.httpClient.post(this.baseUrl, todo);
+    return this.httpClient.post(this.baseUrl, todo, {headers: this.headers});
   }
 
   updateTodo(id, todo) {

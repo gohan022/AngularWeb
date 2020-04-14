@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpInterceptorAuthService implements HttpInterceptor {
+
+  constructor(private cookieService: CookieService) {}
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     /* const username = 'user';
      const password = 'password';
@@ -19,13 +23,20 @@ export class HttpInterceptorAuthService implements HttpInterceptor {
        }
      });*/
 
-    if (sessionStorage.getItem('token')) {
+    /*if (sessionStorage.getItem('token')) {
       req = req.clone({
         setHeaders: {
           Authorization: sessionStorage.getItem('token')
         }
       });
-    }
+    }*/
+
+    req = req.clone({
+      setHeaders: {
+        'X-XSRF-TOKEN': this.cookieService.get('XSRF-TOKEN')
+      },
+      withCredentials: true
+    });
 
     return next.handle(req);
 
@@ -41,4 +52,5 @@ export class HttpInterceptorAuthService implements HttpInterceptor {
     );*/
 
   }
+
 }

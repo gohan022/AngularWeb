@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     this.userService.getToken(this.form.value).subscribe(
       data => {
         console.log(data);
-        sessionStorage.setItem('token', data.token);
+        // sessionStorage.setItem('token', data.token);
         this.router.navigate(['todos']);
       }
     );

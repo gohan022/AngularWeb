@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { HeaderComponent } from './components/common/header/header.component';
 import { FooterComponent } from './components/common/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
@@ -23,6 +23,7 @@ import { NotFoundComponent } from './components/common/error/not-found/not-found
 import { UnauthorizedComponent } from './components/common/error/unauthorized/unauthorized.component';
 import { LoggingInterceptorService } from './services/interceptors/logging-interceptor.service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN'}),
     BrowserAnimationsModule,
     NgbPaginationModule,
     NgbAlertModule,
@@ -69,7 +71,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
       provide: HTTP_INTERCEPTORS,
       useClass: LoggingInterceptorService,
       multi: true
-    }
+    },
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

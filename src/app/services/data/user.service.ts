@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { API_URL } from '../../app.constants';
 
 @Injectable({
@@ -8,10 +8,12 @@ import { API_URL } from '../../app.constants';
 })
 export class UserService {
 
+  private headers = new HttpHeaders().set('Content-Type', 'application/json').set('Access-Control-Allow-Credentials', 'true');
+
   constructor(private httpClient: HttpClient) {
   }
 
   getToken(user): Observable<any> {
-    return this.httpClient.post<any>(`${API_URL}/authenticate`, user);
+    return this.httpClient.post<any>(`${API_URL}/auth/token/generate`, user, {headers: this.headers});
   }
 }
