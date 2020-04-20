@@ -59,7 +59,7 @@ export class TodoService {
     } else {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    console.log(errorMessage);
+   // console.log(errorMessage);
     return throwError(errorMessage);
   }
 }

@@ -1,14 +1,26 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpXsrfTokenExtractor } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+  HttpXsrfTokenExtractor
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { UserService } from '../data/user.service';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { AuthService } from '../auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpInterceptorAuthService implements HttpInterceptor {
 
-  constructor(private cookieService: CookieService) {}
+  constructor(private cookieService: CookieService, private userService: UserService, private auth: AuthService) {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     /* const username = 'user';
@@ -19,7 +31,8 @@ export class HttpInterceptorAuthService implements HttpInterceptor {
     /* req = req.clone({
        // headers: req.headers.append('Authorization', basicAuthHeaderStr)
        setHeaders: {
-         Authorization: basicAuthHeaderStr
+         Authorization: basicAuthHeaderStr,
+         'Access-Control-Allow-Credentials': 'true'
        }
      });*/
 
@@ -33,24 +46,48 @@ export class HttpInterceptorAuthService implements HttpInterceptor {
 
     req = req.clone({
       setHeaders: {
+        'Content-Type': 'application/json',
         'X-XSRF-TOKEN': this.cookieService.get('XSRF-TOKEN')
       },
       withCredentials: true
     });
 
-    return next.handle(req);
+    return next.handle(req).pipe(
+      catchError((err: any) => {
+          if (err.status === 401 || err.status === 403) {
+            if (err.headers.get('X-AUTHENTICATION') === 'TOKEN_EXPIRED') {
+              // if token is invalid/Expired
+              return this.refreshToken(req, next);
+            }
 
-    // to change in response
-    /*return next.handle(req).pipe(tap(
-      event => {
-        console.log(event.type);
-        if (event.type === HttpEventType.Response) {
-          console.log(event.body);
+            this.auth.logout().subscribe();
+          }
+
+          return throwError(err);
         }
-      }
       )
-    );*/
+    );
 
+  }
+
+  private refreshToken(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return this.userService.refreshToken().pipe(
+      switchMap(
+        response => {
+          return next.handle(this.addAuthorizationHeader(request, response));
+        }
+      )
+    );
+  }
+
+  private addAuthorizationHeader(request: HttpRequest<any>, res: HttpResponse<any>): HttpRequest<any> {
+    if (res.status.toString() === 'SUCCESS') {
+      // if refresh token is valid
+      return request.clone({withCredentials: true});
+    }
+
+    // if refresh token is invalid
+    this.auth.logout().subscribe();
   }
 
 }

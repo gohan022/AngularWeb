@@ -7,6 +7,7 @@ import { TodoUpdateComponent } from './components/todo/todo-update/todo-update.c
 import { LoginComponent } from './components/auth/login/login.component';
 import { NotFoundComponent } from './components/common/error/not-found/not-found.component';
 import { CanDeactivatedGuardService } from './services/guards/can-deactivated-guard.service';
+import { AuthGuardService } from './services/guards/auth-guard.service';
 
 
 const routes: Routes = [

@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
 
   username = 'gohan022';
   password = 'password';
+  rememberMe = false;
 
   constructor(private userService: UserService, private router: Router) {
   }
@@ -22,7 +23,6 @@ export class LoginComponent implements OnInit {
   doLogin() {
     this.userService.getToken(this.form.value).subscribe(
       data => {
-        console.log(data);
         // sessionStorage.setItem('token', data.token);
         this.router.navigate(['todos']);
       }

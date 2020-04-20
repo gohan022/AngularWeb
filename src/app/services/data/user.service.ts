@@ -14,6 +14,14 @@ export class UserService {
   }
 
   getToken(user): Observable<any> {
-    return this.httpClient.post<any>(`${API_URL}/auth/token/generate`, user, {headers: this.headers});
+    return this.httpClient.post<any>(`${API_URL}/auth/token/generate`, user);
+  }
+
+  refreshToken(): Observable<any> {
+    return this.httpClient.post(`${API_URL}/auth/token/refresh`, {});
+  }
+
+  logout(): Observable<any> {
+    return this.httpClient.post(`${API_URL}/auth/token/clear`, {});
   }
 }
