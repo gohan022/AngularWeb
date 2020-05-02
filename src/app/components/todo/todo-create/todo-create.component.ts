@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Todo } from '../../common/models/todo';
+import { Todo } from '../../../models/todo';
 import { Router } from '@angular/router';
 import { TodoService } from '../../../services/data/todo.service';
 import { NgForm } from '@angular/forms';

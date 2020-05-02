@@ -13,13 +13,16 @@ export class HeaderComponent implements OnInit {
   constructor(public translate: TranslateService, public auth: AuthService) {
     translate.addLangs(['en', 'fr']);
     translate.setDefaultLang('en');
+
+    const browserLang = translate.getBrowserLang();
+    translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
+  }
+
+  ngOnInit(): void {
   }
 
   switchLang(lang: string) {
     this.translate.use(lang);
-  }
-
-  ngOnInit(): void {
   }
 
   logout(): void {

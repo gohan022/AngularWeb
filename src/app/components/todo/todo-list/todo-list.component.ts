@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { TodoService } from '../../../services/data/todo.service';
-import { Todo } from '../../common/models/todo';
+import { Todo } from '../../../models/todo';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 

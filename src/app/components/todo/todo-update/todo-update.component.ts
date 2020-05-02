@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoService } from '../../../services/data/todo.service';
-import { Todo } from '../../common/models/todo';
+import { Todo } from '../../../models/todo';
 import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { CanComponentDeactivate } from '../../../services/guards/can-deactivated-guard.service';

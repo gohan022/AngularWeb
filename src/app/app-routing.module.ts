@@ -8,15 +8,21 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { NotFoundComponent } from './components/common/error/not-found/not-found.component';
 import { CanDeactivatedGuardService } from './services/guards/can-deactivated-guard.service';
 import { AuthGuardService } from './services/guards/auth-guard.service';
+import { ProductListComponent } from './components/product/product-list/product-list.component';
+import { RegisterComponent } from './components/auth/register/register.component';
 
 
 const routes: Routes = [
   // {path: '', redirectTo: '/', pathMatch: 'full'},
   {path: '', component: HomeComponent},
+  {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
+
   {path: 'todos', component: TodoListComponent},
   {path: 'todos/create', component: TodoCreateComponent},
   {path: 'todos/:id', component: TodoUpdateComponent, canDeactivate: [CanDeactivatedGuardService]},
+
+  {path: 'products', component: ProductListComponent},
 
   {path: '**', component: NotFoundComponent}
 ];

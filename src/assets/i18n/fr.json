@@ -1,4 +1,14 @@
 {
+  "fr": "French",
   "SiteTitle": "Projet angulaire",
-  "Update": "Mise à jour"
+  "Update": "Mise à jour",
+  "Username": "Nom d'utilisateur",
+  "Email": "Email",
+  "errors": {
+    "REQUIRED": "{{0}} est requis",
+    "FIELD_REQUIRED": "Ce champ est requis.",
+    "MIN_MAX_LENGTH": "{{0}} la longueur doit être comprise entre {{1}} et {{2}}",
+    "ALREADY_EXISTS": "{{0}} existe déjà.",
+    "PASSWORD_NOT_MATCH": "Les mots de passe ne correspondent pas."
+  }
 }

@@ -1,4 +1,14 @@
 {
+  "en": "English",
   "SiteTitle": "Angular Project",
-  "update": "Update"
+  "update": "Update",
+  "Username": "Username",
+  "Email": "Email",
+  "errors": {
+    "REQUIRED": "{{0}} is required.",
+    "FIELD_REQUIRED": "This field is required.",
+    "MIN_MAX_LENGTH": "{{0}} length must be between {{1}} and {{2}}",
+    "ALREADY_EXISTS": "{{0}} already exists.",
+    "PASSWORD_NOT_MATCH": "The passwords don't match."
+  }
 }

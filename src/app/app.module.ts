@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { HeaderComponent } from './components/common/header/header.component';
 import { FooterComponent } from './components/common/footer/footer.component';
@@ -15,7 +15,7 @@ import { TodoCreateComponent } from './components/todo/todo-create/todo-create.c
 import { HttpInterceptorAuthService } from './services/interceptors/http-interceptor-auth.service';
 import { LoginComponent } from './components/auth/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { UserListComponent } from './components/user/user-list/user-list.component';
 import { NgbAlertModule, NgbDatepickerModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
@@ -24,10 +24,16 @@ import { UnauthorizedComponent } from './components/common/error/unauthorized/un
 import { LoggingInterceptorService } from './services/interceptors/logging-interceptor.service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CookieService } from 'ngx-cookie-service';
+import { ProductListComponent } from './components/product/product-list/product-list.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { ParamsTranslatePipe } from './params-translate.pipe';
+import { MyMissingTranslationHandler } from './missing-transalation';
+import { ErrorIntercept } from './services/interceptors/ErrorIntercept.service';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ParamsTranslatePipe,
     HeaderComponent,
     FooterComponent,
     HomeComponent,
@@ -38,12 +44,15 @@ import { CookieService } from 'ngx-cookie-service';
     LoginComponent,
     UserListComponent,
     NotFoundComponent,
-    UnauthorizedComponent
+    UnauthorizedComponent,
+    ProductListComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN'}),
     BrowserAnimationsModule,
@@ -58,13 +67,19 @@ import { CookieService } from 'ngx-cookie-service';
         provide: TranslateLoader,
         useFactory: httpTranslateLoader,
         deps: [HttpClient]
-      }
+      },
+      missingTranslationHandler: { provide: MissingTranslationHandler, useClass: MyMissingTranslationHandler}
     })
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorAuthService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorIntercept,
       multi: true
     },
     {

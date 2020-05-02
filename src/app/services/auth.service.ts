@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserService } from './data/user.service';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   loggedIn = false;
   user$ = new BehaviorSubject(null);
+  currentUser: User;
 
   constructor(private userService: UserService, private router: Router) {
   }
