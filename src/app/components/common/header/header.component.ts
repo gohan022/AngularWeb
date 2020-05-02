@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
   logout(): void {
     /*let username = this.authService.getUser.username;
     swal.fire('Logout', `Hola ${username}, has cerrado sessión con éxito!`, 'success');*/
-    this.auth.logout().subscribe();
+    this.auth.doLogout().subscribe();
   }
 
 }

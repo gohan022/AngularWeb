@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 export class UserService {
   // public currentUser: Observable<User>;
 
-  private headers = new HttpHeaders().set('Content-Type', 'application/json').set('Access-Control-Allow-Credentials', 'true');
+  private headers = new HttpHeaders().set('Content-Type', 'application/json');
 
   constructor(private httpClient: HttpClient) {
   }
@@ -21,24 +21,20 @@ export class UserService {
   }
 
   getToken(user): Observable<any> {
-    return this.httpClient.post<any>(`${API_URL}/auth/token/generate`, user).pipe(
-      map(response => {
-         // localStorage.setItem('currentUser', JSON.stringify(response));
-        }
-      )
-    );
+    return this.httpClient.post<any>(`${API_URL}/auth/token/generate`, user);
   }
 
   refreshToken(): Observable<any> {
-    return this.httpClient.post(`${API_URL}/auth/token/refresh`, {});
+    const token = sessionStorage.getItem('refreshToken');
+    return this.httpClient.post(`${API_URL}/auth/token/refresh`, {token});
   }
 
-  logout(): Observable<any> {
+  removeToken(): Observable<any> {
     return this.httpClient.post(`${API_URL}/auth/token/clear`, {});
   }
 
   // Handle Errors
-  error(error: HttpErrorResponse) {
+  /*error(error: HttpErrorResponse) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       errorMessage = error.error.message;
@@ -47,5 +43,5 @@ export class UserService {
     }
     // console.log(errorMessage);
     return throwError(errorMessage);
-  }
+  }*/
 }

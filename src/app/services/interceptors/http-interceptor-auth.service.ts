@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpResponse,
-  HttpXsrfTokenExtractor
-} from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from '../data/user.service';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 
 @Injectable({
@@ -23,44 +15,23 @@ export class HttpInterceptorAuthService implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    /* const username = 'user';
-     const password = 'password';
-     const basicAuthHeaderStr = 'Basic ' + window.btoa(username + ':' + password);*/
-
-    // This request cannot be modified directly that's why request object should be clone before modifying
-    /* req = req.clone({
-       // headers: req.headers.append('Authorization', basicAuthHeaderStr)
-       setHeaders: {
-         Authorization: basicAuthHeaderStr,
-         'Access-Control-Allow-Credentials': 'true'
-       }
-     });*/
-
-    /*if (sessionStorage.getItem('token')) {
-      req = req.clone({
-        setHeaders: {
-          Authorization: sessionStorage.getItem('token')
-        }
-      });
-    }*/
-
+    const authToken = sessionStorage.getItem('accessToken');
     req = req.clone({
       setHeaders: {
         'Content-Type': 'application/json',
-        'X-XSRF-TOKEN': this.cookieService.get('XSRF-TOKEN')
-      },
-      withCredentials: true
+        Authorization: 'Bearer ' + authToken
+      }
     });
 
     return next.handle(req).pipe(
       catchError((err: any) => {
-          if (err.status === 401 || err.status === 403) {
+          if (err.status === 401 || err.status === 400) {
             if (err.headers.get('X-AUTHENTICATION') === 'TOKEN_EXPIRED') {
               // if token is invalid/Expired
               return this.refreshToken(req, next);
             }
 
-            this.auth.logout().subscribe();
+            this.auth.doLogout().subscribe();
           }
 
           return throwError(err);
@@ -80,14 +51,20 @@ export class HttpInterceptorAuthService implements HttpInterceptor {
     );
   }
 
-  private addAuthorizationHeader(request: HttpRequest<any>, res: HttpResponse<any>): HttpRequest<any> {
-    if (res.status.toString() === 'SUCCESS') {
+  private addAuthorizationHeader(request: HttpRequest<any>, response): HttpRequest<any> {
+    if (response.status.toString() === 'SUCCESS') {
+      sessionStorage.setItem('accessToken', response.accessToken);
+
       // if refresh token is valid
-      return request.clone({withCredentials: true});
+      return request.clone({
+        setHeaders: {
+          Authorization: 'Bearer ' + response.accessToken
+        }
+      });
     }
 
     // if refresh token is invalid
-    this.auth.logout().subscribe();
+    this.auth.doLogout().subscribe();
   }
 
 }

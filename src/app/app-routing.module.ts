@@ -18,7 +18,7 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
 
-  {path: 'todos', component: TodoListComponent},
+  {path: 'todos', component: TodoListComponent, canActivate: [AuthGuardService]},
   {path: 'todos/create', component: TodoCreateComponent},
   {path: 'todos/:id', component: TodoUpdateComponent, canDeactivate: [CanDeactivatedGuardService]},
 

@@ -7,7 +7,7 @@
     <div class="alert alert-success" th:if="${param.logout != null}">
       You have been logged out.
     </div>-->
-    <form method="post" (ngSubmit)="!loginForm.invalid && doLogin()" #loginForm="ngForm">
+    <form method="post" (ngSubmit)="!loginForm.invalid && login()" #loginForm="ngForm">
       <div class="form-group"><label for="email">Username</label>
         <input type="text" class="form-control"
                name="username" id="email" required

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './components/common/header/header.component';
 import { FooterComponent } from './components/common/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
@@ -23,7 +23,6 @@ import { NotFoundComponent } from './components/common/error/not-found/not-found
 import { UnauthorizedComponent } from './components/common/error/unauthorized/unauthorized.component';
 import { LoggingInterceptorService } from './services/interceptors/logging-interceptor.service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { CookieService } from 'ngx-cookie-service';
 import { ProductListComponent } from './components/product/product-list/product-list.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ParamsTranslatePipe } from './params-translate.pipe';
@@ -54,7 +53,6 @@ import { ErrorIntercept } from './services/interceptors/ErrorIntercept.service';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN'}),
     BrowserAnimationsModule,
     NgbPaginationModule,
     NgbAlertModule,
@@ -74,20 +72,19 @@ import { ErrorIntercept } from './services/interceptors/ErrorIntercept.service';
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: HttpInterceptorAuthService,
+      useClass: LoggingInterceptorService,
       multi: true
     },
-    {
+     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorIntercept,
       multi: true
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: LoggingInterceptorService,
+      useClass: HttpInterceptorAuthService,
       multi: true
-    },
-    CookieService
+    }
   ],
   bootstrap: [AppComponent]
 })

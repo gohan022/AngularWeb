@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/data/user.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 class RegisterUser {
   firstName: string;
@@ -25,7 +26,7 @@ export class RegisterComponent implements OnInit {
   saving = false;
   langSelect: string;
 
-  constructor(private userService: UserService, private translate: TranslateService) {
+  constructor(private userService: UserService, private  router: Router, private translate: TranslateService) {
     this.user = new RegisterUser();
   }
 
@@ -43,7 +44,9 @@ export class RegisterComponent implements OnInit {
         })
       ).subscribe(
         data => {
+          this.userForm.reset();
           console.log(data);
+          this.router.navigate(['/login']);
         },
         error => {
           console.log(error.error.errors);

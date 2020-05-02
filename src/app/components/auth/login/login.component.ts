@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../../services/data/user.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,14 +15,14 @@ export class LoginComponent implements OnInit {
   password = 'password';
   rememberMe = false;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
   }
 
-  doLogin() {
-    this.userService.getToken(this.form.value).subscribe(
+  login() {
+    this.auth.doLogin(this.form.value).subscribe(
       data => {
         // sessionStorage.setItem('token', data.token);
         this.router.navigate(['todos']);
